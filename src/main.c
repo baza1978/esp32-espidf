@@ -1,4 +1,6 @@
 #include <esp_lcd_panel_io.h>
+#include "esp_psram.h"
+
 #include "../managed_components/espressif__esp_lcd_touch_gt911/include/esp_lcd_touch_gt911.h"
 //#include "../managed_components/espressif__esp_lcd_touch/include/esp_lcd_touch.h"
 //#include "driver/spi_master.h"
@@ -7,6 +9,8 @@
 #include "esp_timer.h"
 #include "esp_log.h"
 #include "esp_sleep.h"
+#include "lcd.h"
+
 
 #define CONFIG_LCD_HRES 800
 #define CONFIG_LCD_VRES 480
@@ -66,6 +70,10 @@ esp_err_t InitTouch(){
 };
 void app_main() {
 
+//    esp_psram_init();
+//    size_t psram_size = esp_psram_get_size();
+//    printf("PSRAM size: %d bytes\n", psram_size);
+
     InitI2C();
     InitTouch();
 
@@ -77,6 +85,10 @@ void app_main() {
     esp_timer_handle_t periodic_timer;
     ESP_ERROR_CHECK(esp_timer_create(&periodic_timer_args, &periodic_timer));
     ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, 50000));
+
+
+
+    LCDInit();
 }
 
 static void periodic_timer_callback(void* arg)
